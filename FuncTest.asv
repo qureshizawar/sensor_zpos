@@ -1,9 +1,9 @@
 clear all
 close all
 
-SenVert = 30;
+SenVert = 15;
 SenHoriz = 90;
-MountAngle = 0; %+ve clockwise
+MountAngle = -5; %+ve clockwise
 Gamma = 0.1;
 
 BLength = 1;
