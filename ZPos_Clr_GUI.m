@@ -114,7 +114,6 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 
-
 SenVert = get(handles.slider2,'Value');
 MountAngle = get(handles.slider3,'Value');
 GroundPresep = get(handles.slider1,'Value');
