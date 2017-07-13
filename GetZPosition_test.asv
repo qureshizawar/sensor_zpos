@@ -80,8 +80,8 @@ ggLi = zeros(1,2);
 gzLi = zeros(1,2);
 % if norm(ZPosGroundA) > 0
     if max(ZPosGround) > BHeight
-        ggHi(1) = ggH(find(ggH > 0,1, 'first'));
-        ggHi(2) = ggH(find(ggH > 0,1, 'last'))
+        ggHi(1) = ggH(find(ggH > 0,1, 'first'))
+        ggHi(2) = ggH(find(ggH > 0,1, 'last'));
 
         gzHi(1) = gzH(find(gzH > 0,1, 'first'));
         gzHi(2) = gzH(find(gzH > 0,1, 'last'));
