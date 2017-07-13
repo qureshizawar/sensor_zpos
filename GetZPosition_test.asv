@@ -3,7 +3,7 @@ close all
 
 SenVert = 15;
 SenHoriz = 90;
-MountAngle = -5; %+ve clockwise
+MountAngle = 5; %+ve clockwise
 Alpha = ((SenVert/2) + MountAngle)*(pi/180);
 Beta = ((SenVert/2) - MountAngle)*(pi/180); %FOV looking down
 Gamma = 0.1*(pi/180);
@@ -53,50 +53,36 @@ for a = 1:size(Ground,1)
     end
 end
 
+ZPosGroundA = ZPosGround;
+ZPosGroundA(isnan(ZPosGround)) = 0;
+gH = zeros(2);
+gL = zeros(2);
+if norm(ZPosGroundA) > 0
+    if max(ZPosGround) > BHeight
+        gzH(1) = ZPosGround(find(ZPosGround >= BHeight + (BLength)*tan(Beta), 1, 'first'));
+        gzH(2) = ZPosGround(find(ZPosGround >= BHeight + (BLength + Wx)*tan(Beta), 1, 'last'));
+        ggH(1) = GroundCrit(find(ZPosGround >= BHeight + (BLength)*tan(Beta), 1, 'first'));
+        ggH(2) = GroundCrit(find(ZPosGround >= BHeight + (BLength + Wx)*tan(Beta), 1, 'last'));
+
+        gH = [ggH(1) gzH(1); ggH(2) gzH(2)]
+
+    end
+
+    gzL(1) = ZPosGround(find(ZPosGround <= BHeight, 1, 'first'));
+    gzL(2) = ZPosGround(find(ZPosGround <= BHeight, 1, 'last'));
+    ggL(1) = GroundCrit(find(ZPosGround <= BHeight, 1, 'first'));
+    ggL(2) = GroundCrit(find(ZPosGround <= BHeight, 1, 'last'));
+
+    gL = [ggL(1) gzL(1); ggL(2) gzL(2)]
+end
+
 figure
 h = plot(Ground,ZPosT,'r--',GroundCrit,ZPosGround,'g','LineWidth',2');
 xlim([0 Ground(end)])
 ylim([0 ZPosT(end)])
 
-gzL(1) = ZPosGround(find(ZPosGround <= BHeight, 1, 'first'));
-gzL(2) = ZPosGround(find(ZPosGround <= BHeight, 1, 'last'));
-ggL(1) = GroundCrit(find(ZPosGround <= BHeight, 1, 'first'));
-ggL(2) = GroundCrit(find(ZPosGround <= BHeight, 1, 'last'));
-
-gL = [ggL(1) gzL(1); ggL(2) gzL(2)]
-
-gzH(1) = ZPosGround(find(ZPosGround >= BHeight + (BLength)*tan(Beta), 1, 'first'));
-gzH(2) = ZPosGround(find(ZPosGround >= BHeight + (BLength + Wx)*tan(Beta), 1, 'last'));
-ggH(1) = GroundCrit(find(ZPosGround >= BHeight + (BLength)*tan(Beta), 1, 'first'));
-ggH(2) = GroundCrit(find(ZPosGround >= BHeight + (BLength + Wx)*tan(Beta), 1, 'last'));
-
-gH = [ggH(1) gzH(1); ggH(2) gzH(2)]
-
-% ZPosGroundA = ZPosGround;
-% ZPosGroundA(isnan(ZPosGround)) = 0;
-ggHi = zeros(1,2);
-gzHi = zeros(1,2);
-ggLi = zeros(1,2);
-gzLi = zeros(1,2);
-% if norm(ZPosGroundA) > 0
-    if max(ZPosGround) > BHeight
-        ggHi(1) = ggH(find(ggH > 0,1, 'first'))
-        ggHi(2) = ggH(find(ggH > 0,1, 'last'));
-
-        gzHi(1) = gzH(find(gzH > 0,1, 'first'));
-        gzHi(2) = gzH(find(gzH > 0,1, 'last'));
-    end
-
-    ggLi(1) = ggL(find(ggL > 0,1, 'first'));
-    ggLi(2) = ggL(find(ggL > 0,1, 'last'));
-
-    gzLi(1) = gzL(find(gzL > 0,1, 'first'));
-    gzLi(2) = gzL(find(gzL > 0,1, 'last'));
-% end
-
-
-patch([0,ggHi(1),ggHi(2), 0],[gzHi(1),gzHi(1),gzHi(2), gzHi(2)],'g')
-patch([0,ggLi(1),ggLi(2), 0],[gzLi(1),gzLi(1),gzLi(2), gzLi(2)],'g')
+patch([0,gH(1,1),gH(2,1), 0],[gH(1,2),gH(1,2),gH(2,2), gH(2,2)],'g')
+patch([0,gL(1,1),gL(2,1), 0],[gL(1,2),gL(1,2),gL(2,2), gL(2,2)],'g')
 alpha(.5)
 
 uistack(h(2),'top')
