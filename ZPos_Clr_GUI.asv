@@ -122,9 +122,9 @@ Gamma = get(handles.slider5,'Value');
 ObjHeightPersep = get(handles.slider6,'Value');
 ObjDistancePersep = get(handles.slider7,'Value');
 ClrObjHeight = get(handles.slider8,'Value');
-BHeight = 0.4 ;
-BLength = 1 ;
-WAngle = 45 ;
+BHeight = ;
+BLength = ;
+
 
 ZPos = linspace(0.1,2.4,461); %increment 5mm
 ZPosT = transpose(ZPos);
@@ -136,27 +136,32 @@ DistanceHi = linspace(0.1,200,3999); %increment 50mm
 DistanceHiT = transpose(DistanceHi);
 
 
-[Ground,GroundCrit,ZPosGround, gH, gL] = GetZPosition(SenVert,MountAngle,GroundPresep,ZPosT,BHeight,BLength,WAngle);
+[Ground,GroundCrit,ZPosGround, gH, gL] = GetZPosition(SenVert,MountAngle,GroundPresep,ZPosT,BHeight,BLength,WAngle)
 
 % figure
-h = plot(handles.axes1,Ground,ZPosT,'r--',GroundCrit,ZPosGround,'g','LineWidth',2');
+plot(handles.axes1,Ground,ZPosT,'r--',GroundCrit,ZPosGround,'g','LineWidth',2')
 xlim(handles.axes1,[0 Ground(end)])
 ylim(handles.axes1,[0 ZPosT(end)])
 
-p1 = patch(handles.axes1,[0,gH(1,1),gH(2,1), 0],[gH(1,2),gH(1,2),gH(2,2), gH(2,2)],'g');
-p2 = patch(handles.axes1,[0,gL(1,1),gL(2,1), 0],[gL(1,2),gL(1,2),gL(2,2), gL(2,2)],'g');
-alpha(p1,.5)
-alpha(p2,.5)
-
-uistack(h(2),'top')
-
+ZPosGroundA = ZPosGround;
+ZPosGroundA(isnan(ZPosGround)) = 0;
+if norm(ZPosGroundA) > 0
+%     hold (handles.axes1,'on')
+%     h1 = area(handles.axes1,GroundCrit,ZPosGround);
+%     h1.FaceColor = [0 0.9 0];
+%     alpha(.5)
+    hold (handles.axes1,'on')
+    h2 = area(handles.axes1,GroundCrit,ZPosGround,max(ZPosGround));
+    h2.FaceColor = [0 0.9 0];
+    alpha(.5)
+end
 grid (handles.axes1,'on')
 grid (handles.axes1,'minor')
 title(handles.axes1,'Sensor height vs Distance to perceive Gnd')
 xlabel(handles.axes1,'Distance to perceive (m)')
 ylabel(handles.axes1,'Sensor height (Z-position (m))')
 legend(handles.axes1,'All',['Target criteria ' num2str(GroundPresep) 'm'],'Location','northwest')
-% hold (handles.axes1,'off')
+hold (handles.axes1,'off')
 
 [objpersep,ObjCrit,ZPosObj,objpersepProbable,ZPosProbable] = GetZPositionObject(SenVert,MountAngle,Gamma,ZPosT,HeightT,Ground,ZPosGround,ObjHeightPersep,ObjDistancePersep);
 
