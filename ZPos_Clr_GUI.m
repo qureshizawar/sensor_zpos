@@ -138,16 +138,9 @@ DistanceHiT = transpose(DistanceHi);
 [Ground,GroundCrit,ZPosGround, gH, gL] = GetZPosition(SenVert,MountAngle,GroundPresep,ZPosT,BHeight,BLength,WAngle);
 
 % figure
-h = plot(handles.axes1,Ground,ZPosT,'r--',GroundCrit,ZPosGround,'g','LineWidth',2');
+Gndh(1:2) = plot(handles.axes1,Ground,ZPosT,'r--',GroundCrit,ZPosGround,'g','LineWidth',2');
 xlim(handles.axes1,[0 Ground(end)])
 ylim(handles.axes1,[0 ZPosT(end)])
-
-p1 = patch(handles.axes1,[0,gH(1,1),gH(2,1), 0],[gH(1,2),gH(1,2),gH(2,2), gH(2,2)],'g');
-p2 = patch(handles.axes1,[0,gL(1,1),gL(2,1), 0],[gL(1,2),gL(1,2),gL(2,2), gL(2,2)],'g');
-alpha(p1,.5)
-alpha(p2,.5)
-
-uistack(h(2),'top')
 
 grid (handles.axes1,'on')
 grid (handles.axes1,'minor')
@@ -155,72 +148,130 @@ title(handles.axes1,'Sensor height vs Distance to perceive Gnd')
 xlabel(handles.axes1,'Distance to perceive (m)')
 ylabel(handles.axes1,'Sensor height (Z-position (m))')
 legend(handles.axes1,'All',['Target criteria ' num2str(GroundPresep) 'm'],'Location','northwest')
+
+Gndh(3) = patch([0,gH(1,1),gH(2,1), 0],[gH(1,2),gH(1,2),gH(2,2), gH(2,2)],'g','Parent',handles.axes1);
+Gndh(4) = patch([0,gL(1,1),gL(2,1), 0],[gL(1,2),gL(1,2),gL(2,2), gL(2,2)],'g','Parent',handles.axes1);
+
+alpha(Gndh(3),.5)
+alpha(Gndh(4),.5)
+
+uistack(Gndh(3),'bottom')
+uistack(Gndh(4),'bottom')
+uistack(Gndh(1),'top')
+uistack(Gndh(2),'top')
+
+
 % hold (handles.axes1,'off')
 
-[objpersep,ObjCrit,ZPosObj,objpersepProbable,ZPosProbable] = GetZPositionObject(SenVert,MountAngle,Gamma,ZPosT,HeightT,Ground,ZPosGround,ObjHeightPersep,ObjDistancePersep);
+[objpersep,ObjCrit,ZPosObj,objpersepProbable,ZPosProbable,oH,oL] = GetZPositionObject(SenVert,MountAngle,Gamma,ZPosT,HeightT,Ground,ZPosGround,ObjHeightPersep,ObjDistancePersep,BLength,BHeight,WAngle);
 
-plot(handles.axes2,objpersep,ZPosT,'r--',ObjCrit,ZPosObj,'g','LineWidth',2')
+% plot(handles.axes2,objpersep,ZPosT,'r--',ObjCrit,ZPosObj,'g','LineWidth',2')
+% xlim(handles.axes2,[0 objpersep(end)])
+% ylim(handles.axes2,[0 ZPosT(end)])
+% 
+% ZPosObjA = ZPosObj;
+% ZPosObjA(isnan(ZPosObj)) = 0;
+% if norm(ZPosObjA) > 0
+%     hold (handles.axes2,'on')
+%     h = area(handles.axes2,ObjCrit,ZPosObj, max(ZPosObj));
+%     h(1).FaceColor = [0 0.9 0];
+%     alpha(.5)
+% end
+% grid (handles.axes2,'on')
+% grid (handles.axes2,'minor')
+% title(handles.axes2,'Sensor height vs Distance to perceive Obj')
+% xlabel(handles.axes2,'Distance to perceive (m)')
+% ylabel(handles.axes2,'Max sensor height (Z-position (m))')
+% % legend(handles.axes2,'All','Target criteria (30cm @ 1.3m)','Location','northwest')
+% legend(handles.axes2,'All',['Target criteria ' num2str(ObjHeightPersep) 'm' ' @' num2str(ObjDistancePersep) 'm'],'Location','northwest')
+% hold (handles.axes2,'off')
+
+Objh(1:2) = plot(handles.axes2,objpersep,ZPosT,'r--',ObjCrit,ZPosObj,'g','LineWidth',2');
 xlim(handles.axes2,[0 objpersep(end)])
 ylim(handles.axes2,[0 ZPosT(end)])
 
-ZPosObjA = ZPosObj;
-ZPosObjA(isnan(ZPosObj)) = 0;
-if norm(ZPosObjA) > 0
-    hold (handles.axes2,'on')
-    h = area(handles.axes2,ObjCrit,ZPosObj, max(ZPosObj));
-    h(1).FaceColor = [0 0.9 0];
-    alpha(.5)
-end
 grid (handles.axes2,'on')
 grid (handles.axes2,'minor')
 title(handles.axes2,'Sensor height vs Distance to perceive Obj')
 xlabel(handles.axes2,'Distance to perceive (m)')
 ylabel(handles.axes2,'Max sensor height (Z-position (m))')
-% legend(handles.axes2,'All','Target criteria (30cm @ 1.3m)','Location','northwest')
 legend(handles.axes2,'All',['Target criteria ' num2str(ObjHeightPersep) 'm' ' @' num2str(ObjDistancePersep) 'm'],'Location','northwest')
-hold (handles.axes2,'off')
 
-plot(handles.axes3,objpersep,ZPosT,'r--',objpersepProbable,ZPosProbable,'g','LineWidth',2')
-xlim(handles.axes3,[0 objpersep(end)])
-ylim(handles.axes3,[0 ZPosT(end)])
+Objh(3) = patch([0,oH(1,1),oH(2,1), 0],[oH(1,2),oH(1,2),oH(2,2), oH(2,2)],'g','Parent',handles.axes2);
+Objh(4) = patch([0,oL(1,1),oL(2,1), 0],[oL(1,2),oL(1,2),oL(2,2), oL(2,2)],'g','Parent',handles.axes2);
 
-ZPosProbableA = ZPosProbable;
-ZPosProbableA(isnan(ZPosProbable)) = 0;
-if norm(ZPosProbableA) > 0
-    hold (handles.axes3,'on')
-    h = area(handles.axes3,objpersepProbable,ZPosProbable, max(ZPosProbable));
-    h(1).FaceColor = [0 0.9 0];
-    alpha(.5)
-end
-grid (handles.axes3,'on')
-grid (handles.axes3,'minor')
-title(handles.axes3,'Sensor height vs Distance to perceive Gnd & Obj')
-xlabel(handles.axes3,'Distance to perceive (m)')
-ylabel(handles.axes3,'Max sensor height (Z-position (m))')
-legend(handles.axes3,'All',['Target criteria ' num2str(ObjHeightPersep) 'm' ' @' num2str(ObjDistancePersep) 'm'],'Location','northwest')
-hold (handles.axes3,'off')
+alpha(Objh(3),.5)
+alpha(Objh(4),.5)
+
+uistack(Objh(3),'bottom')
+uistack(Objh(4),'bottom')
+uistack(Objh(1),'top')
+uistack(Objh(2),'top')
+
+% plot(handles.axes3,objpersep,ZPosT,'r--',objpersepProbable,ZPosProbable,'g','LineWidth',2')
+% xlim(handles.axes3,[0 objpersep(end)])
+% ylim(handles.axes3,[0 ZPosT(end)])
+% 
+% ZPosProbableA = ZPosProbable;
+% ZPosProbableA(isnan(ZPosProbable)) = 0;
+% if norm(ZPosProbableA) > 0
+%     hold (handles.axes3,'on')
+%     h = area(handles.axes3,objpersepProbable,ZPosProbable, max(ZPosProbable));
+%     h(1).FaceColor = [0 0.9 0];
+%     alpha(.5)
+% end
+% grid (handles.axes3,'on')
+% grid (handles.axes3,'minor')
+% title(handles.axes3,'Sensor height vs Distance to perceive Gnd & Obj')
+% xlabel(handles.axes3,'Distance to perceive (m)')
+% ylabel(handles.axes3,'Max sensor height (Z-position (m))')
+% legend(handles.axes3,'All',['Target criteria ' num2str(ObjHeightPersep) 'm' ' @' num2str(ObjDistancePersep) 'm'],'Location','northwest')
+% hold (handles.axes3,'off')
 
 
-[swT] = GetZPositionClearance(SenVert,MountAngle,Gamma,DistanceHi,ClrObjHeight);
+[swT,Clri] = GetZPositionClearance(SenVert,MountAngle,Gamma,DistanceHi,ClrObjHeight);
 
 DistanceHiT(isnan(swT)) = NaN;
 
-plot(handles.axes4,DistanceHiT,swT,'LineWidth',2')
+% plot(handles.axes4,DistanceHiT,swT,'LineWidth',2')
 
-swTA = swT;
-swTA(isnan(swT)) = 0;
-if norm(swTA) > 0
-    hold (handles.axes4,'on')
-    h = area(handles.axes4,DistanceHiT,swT,max(swT));
-    h(1).FaceColor = [0 0.9 0];
-    alpha(.5)
-end
+% swTA = swT;
+% swTA(isnan(swT)) = 0;
+% if norm(swTA) > 0
+%     hold (handles.axes4,'on')
+%     h = area(handles.axes4,DistanceHiT,swT,max(swT));
+%     h(1).FaceColor = [0 0.9 0];
+%     alpha(.5)
+% end
+% grid (handles.axes4,'on')
+% grid (handles.axes4,'minor')
+% title(handles.axes4,['Sensor height vs suspended object ' num2str(ClrObjHeight) 'm high'])
+% xlabel(handles.axes4,'Min Distance to perceive (m)')
+% ylabel(handles.axes4,'Sensor height (Z-position (m))')
+% hold (handles.axes4,'off')
+
+Clrh(1) = plot(handles.axes4,DistanceHiT,swT,'LineWidth',2');
+xlim(handles.axes4,[0 max(DistanceHiT)])
+ylim(handles.axes4,[0 max(swT)])
+
+% swTA = swT;
+% swTA(isnan(swT)) = 0;
+% if norm(swTA) > 0
+%     hold on
+%     h = area(DistanceHiT,swT,max(swT));
+%     h(1).FaceColor = [0 0.9 0];
+%     alpha(.5)
+% end
 grid (handles.axes4,'on')
 grid (handles.axes4,'minor')
 title(handles.axes4,['Sensor height vs suspended object ' num2str(ClrObjHeight) 'm high'])
 xlabel(handles.axes4,'Min Distance to perceive (m)')
 ylabel(handles.axes4,'Sensor height (Z-position (m))')
-hold (handles.axes4,'off')
+
+Clrh(2) = patch([max(DistanceHiT),Clri(1,1),Clri(2,1), max(DistanceHiT)],[Clri(1,2),Clri(1,2),Clri(2,2), Clri(2,2)],'g','Parent',handles.axes4);
+alpha(Clrh(2),.5)
+
+uistack(Clrh(1),'top')
 
 % clear (SenVert,MountAngle,GroundPresep,ZPosT,HeightT,Ground,ZPosGround,ObjHeightPersep,ObjDistancePersep)
 % clear (Ground,GroundCrit,ZPosGround,objpersep,ObjCrit,ZPosObj,objpersepProbable,ZPosProbable)

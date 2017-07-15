@@ -1,7 +1,7 @@
 clear all
 close all
 
-SenVert = 15;
+SenVert = 30;
 SenHoriz = 90;
 MountAngle = -5; %+ve clockwise
 Alpha = ((SenVert/2) + MountAngle)*(pi/180);
@@ -15,7 +15,7 @@ WAngle = 45*(pi/180);
 % Wx = Wy/tan(WAngle);
 % Wx = transpose(Wx);
 
-GroundPresep = 4;
+GroundPresep = 6;
 
 ObjHeightPersep = 0.3;
 
