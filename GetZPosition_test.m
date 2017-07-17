@@ -3,7 +3,7 @@ close all
 
 SenVert = 30;
 SenHoriz = 90;
-MountAngle = -5; %+ve clockwise
+MountAngle = 0; %+ve clockwise
 Alpha = ((SenVert/2) + MountAngle)*(pi/180);
 Beta = ((SenVert/2) - MountAngle)*(pi/180); %FOV looking down
 Gamma = 0.1*(pi/180);
