@@ -211,6 +211,7 @@ uistack(Objh(3),'bottom')
 uistack(Objh(4),'bottom')
 uistack(Objh(1),'top')
 uistack(Objh(2),'top')
+<<<<<<< HEAD
 
 % plot(handles.axes3,objpersep,ZPosT,'r--',objpersepProbable,ZPosProbable,'g','LineWidth',2')
 % xlim(handles.axes3,[0 objpersep(end)])
@@ -237,6 +238,34 @@ uistack(Objh(2),'top')
 
 DistanceHiT(isnan(swT)) = NaN;
 
+=======
+
+% plot(handles.axes3,objpersep,ZPosT,'r--',objpersepProbable,ZPosProbable,'g','LineWidth',2')
+% xlim(handles.axes3,[0 objpersep(end)])
+% ylim(handles.axes3,[0 ZPosT(end)])
+% 
+% ZPosProbableA = ZPosProbable;
+% ZPosProbableA(isnan(ZPosProbable)) = 0;
+% if norm(ZPosProbableA) > 0
+%     hold (handles.axes3,'on')
+%     h = area(handles.axes3,objpersepProbable,ZPosProbable, max(ZPosProbable));
+%     h(1).FaceColor = [0 0.9 0];
+%     alpha(.5)
+% end
+% grid (handles.axes3,'on')
+% grid (handles.axes3,'minor')
+% title(handles.axes3,'Sensor height vs Distance to perceive Gnd & Obj')
+% xlabel(handles.axes3,'Distance to perceive (m)')
+% ylabel(handles.axes3,'Max sensor height (Z-position (m))')
+% legend(handles.axes3,'All',['Target criteria ' num2str(ObjHeightPersep) 'm' ' @' num2str(ObjDistancePersep) 'm'],'Location','northwest')
+% hold (handles.axes3,'off')
+
+
+[swT,Clri] = GetZPositionClearance(SenVert,MountAngle,Gamma,DistanceHi,ClrObjHeight);
+
+DistanceHiT(isnan(swT)) = NaN;
+
+>>>>>>> 1b28b0df53585226eb8c1262a116dcb309af0f2b
 % plot(handles.axes4,DistanceHiT,swT,'LineWidth',2')
 
 % swTA = swT;
