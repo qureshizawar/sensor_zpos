@@ -1,9 +1,9 @@
 clear all
 close all
 
-SenVert = 30;
+SenVert = 15;
 SenHoriz = 90;
-MountAngle = -5; %+ve clockwise
+MountAngle = 5; %+ve clockwise
 Alpha = ((SenVert/2) + MountAngle)*(pi/180);
 Beta = ((SenVert/2) - MountAngle)*(pi/180); %FOV looking down
 Gamma = 0.1*(pi/180);
@@ -15,7 +15,7 @@ WAngle = 45*(pi/180);
 % Wx = Wy/tan(WAngle);
 % Wx = transpose(Wx);
 
-GroundPresep = 6;
+GroundPresep = 4;
 
 ObjHeightPersep = 0.3;
 
@@ -64,7 +64,7 @@ if norm(ZPosGroundA) > 0
         ggH(1) = GroundCrit(find(ZPosGround >= BHeight + (BLength)*tan(Beta), 1, 'first'));
         ggH(2) = GroundCrit(find(ZPosGround >= BHeight + (BLength + Wx)*tan(Beta), 1, 'last'));
 
-        gH = [ggH(1) gzH(1); ggH(2) gzH(2)];
+        gH = [ggH(1) gzH(1); ggH(2) gzH(2)]
 
     end
 
@@ -73,7 +73,7 @@ if norm(ZPosGroundA) > 0
     ggL(1) = GroundCrit(find(ZPosGround <= BHeight, 1, 'first'));
     ggL(2) = GroundCrit(find(ZPosGround <= BHeight, 1, 'last'));
 
-    gL = [ggL(1) gzL(1); ggL(2) gzL(2)];
+    gL = [ggL(1) gzL(1); ggL(2) gzL(2)]
 end
 
 figure

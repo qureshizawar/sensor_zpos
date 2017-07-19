@@ -13,15 +13,9 @@ BHeight = 0.4;
 WAngle = 45*(pi/180);
 
 GroundPresep = 2;
-<<<<<<< HEAD
 ObjHeightPersep = 0.3;
 ObjHeightPersep2 = 0.1;
 ObjDistancePersep = 2;
-=======
-ObjHeightPersep = 0.1;
-ObjHeightPersep2 = 0.1;
-ObjDistancePersep = 1.5;
->>>>>>> 1b28b0df53585226eb8c1262a116dcb309af0f2b
 ClrObjHeight = 1.7;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
