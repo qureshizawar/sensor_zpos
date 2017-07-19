@@ -4,7 +4,7 @@ close all
 SenVert = 30;
 SenHoriz = 90;
 MountAngle = 0; %+ve clockwise
-MountAngleVar = linspace(-10,10,200);
+MountAngleVar = linspace(-10,10,20);
 Gamma = 0.1;
 
 Alpha = ((SenVert/2) + MountAngle)*(pi/180);
@@ -40,8 +40,7 @@ DistanceHiT = transpose(DistanceHi);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 sw = ClrObjHeight - DistanceHi*tan(Alpha-Gamma);
-dmin = (ClrObjHeight - ZPosT)/tan(Alpha-Gamma);
-dminVar = (ClrObjHeight - 1.2)./tan(AlphaVar-Gamma);
+% dmin = (ZPosT - ClrObjHeight)/tan(Alpha);
 % d = 3;
 % sw = round(sw, d); %// or y = round(x, d, 'decimals')
 sw(sw < 0.1) = NaN;
@@ -63,15 +62,6 @@ Clri = zeros(2);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-figure
-plot(dminVar,MountAngleVar)
-
-grid ('on')
-grid ('minor')
-title(['Sensor height vs suspended object ' num2str(ClrObjHeight) 'm high'])
-xlabel('Min Distance to perceive (m)')
-ylabel('MountAngle (Deg)')
 
 DistanceHiT(isnan(swT)) = NaN;
 
