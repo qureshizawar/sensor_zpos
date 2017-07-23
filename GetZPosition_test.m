@@ -3,7 +3,7 @@ close all
 
 SenVert = 30;
 SenHoriz = 90;
-MountAngle = -5; %+ve clockwise
+MountAngle = 10; %+ve clockwise
 Alpha = ((SenVert/2) + MountAngle)*(pi/180);
 Beta = ((SenVert/2) - MountAngle)*(pi/180); %FOV looking down
 Gamma = 0.1*(pi/180);
@@ -15,7 +15,7 @@ WAngle = 45*(pi/180);
 % Wx = Wy/tan(WAngle);
 % Wx = transpose(Wx);
 
-GroundPresep = 6;
+GroundPresep = 4;
 
 ObjHeightPersep = 0.3;
 

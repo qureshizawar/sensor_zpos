@@ -22,7 +22,7 @@ function varargout = ZPos_Clr_GUI(varargin)
 
 % Edit the above text to modify the response to help ZPos_Clr_GUI
 
-% Last Modified by GUIDE v2.5 12-Jul-2017 09:55:19
+% Last Modified by GUIDE v2.5 20-Jul-2017 11:26:10
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -141,6 +141,10 @@ end
 
 [Ground,GroundCrit,ZPosGround, gH, gL] = GetZPosition(SenVert,MountAngle,GroundPresep,ZPosT,BHeight,BLength,WAngle);
 
+filename = 'Sensor height vs Distance to perceive Gnd data.xlsx';
+A = [Ground ZPosT GroundCrit ZPosGround];
+xlswrite(filename,A)
+
 % figure
 Gndh(1:2) = plot(handles.axes1,Ground,ZPosT,'r--',GroundCrit,ZPosGround,'g','LineWidth',2');
 xlim(handles.axes1,[0 Ground(end)])
@@ -189,6 +193,10 @@ uistack(Gndh(2),'top')
 % % legend(handles.axes2,'All','Target criteria (30cm @ 1.3m)','Location','northwest')
 % legend(handles.axes2,'All',['Target criteria ' num2str(ObjHeightPersep) 'm' ' @' num2str(ObjDistancePersep) 'm'],'Location','northwest')
 % hold (handles.axes2,'off')
+
+filename = 'Sensor height vs Distance to perceive Obj data.xlsx';
+A = [objpersep ZPosT ObjCrit ZPosObj];
+xlswrite(filename,A)
 
 Objh(1:2) = plot(handles.axes2,objpersep,ZPosT,'r--',ObjCrit,ZPosObj,'g','LineWidth',2');
 xlim(handles.axes2,[0 objpersep(end)])
@@ -253,6 +261,10 @@ DistanceHiT(isnan(swT)) = NaN;
 % xlabel(handles.axes4,'Min Distance to perceive (m)')
 % ylabel(handles.axes4,'Sensor height (Z-position (m))')
 % hold (handles.axes4,'off')
+
+filename = 'Sensor height vs suspended object data.xlsx';
+A = [DistanceHiT swT];
+xlswrite(filename,A)
 
 Clrh(1) = plot(handles.axes4,DistanceHiT,swT,'LineWidth',2');
 xlim(handles.axes4,[0 max(DistanceHiT)])
@@ -448,3 +460,103 @@ function slider8_CreateFcn(hObject, eventdata, handles)
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
+
+
+% --- Executes on button press in pushbutton2.
+function pushbutton2_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+SenVert = get(handles.slider2,'Value');
+MountAngle = get(handles.slider3,'Value');
+GroundPresep = get(handles.slider1,'Value');
+Gamma = get(handles.slider5,'Value');
+ObjHeightPersep = get(handles.slider6,'Value');
+ObjDistancePersep = get(handles.slider7,'Value');
+ClrObjHeight = get(handles.slider8,'Value');
+BHeight = 1.05 ;
+BLength = 1.118 ;
+WAngle = 40 ;
+
+ZPos = linspace(0.1,2.4,461); %increment 5mm
+ZPosT = transpose(ZPos);
+
+Height = linspace(0.1,6,591);
+HeightT = transpose(Height);
+
+DistanceHi = linspace(0,300,6001); %increment 50mm
+DistanceHiT = transpose(DistanceHi);
+
+if abs(MountAngle) >= abs((SenVert)/2)
+    h = msgbox('Warning: MountAngle >= SenVert , some or all outputs maybe incorrect');
+end
+
+ZPosTVar = [0.1 0.2 0.3 0.8 0.9 1]';
+MountAngleVar = linspace(-14,14,200);
+AlphaVar = ((SenVert/2) + MountAngleVar)*(pi/180);
+
+[dminVar] = GetMaxZPositionClearance(ZPosTVar,AlphaVar,Gamma,ClrObjHeight);
+
+filename = 'MountAngle_v_MinDist data.xlsx';
+A = [MountAngleVar' dminVar];
+xlswrite(filename,A)
+
+plot(handles.axes3,dminVar,MountAngleVar)
+
+grid (handles.axes3,'on')
+grid (handles.axes3,'minor')
+title(handles.axes3,['Sensor height vs suspended object ' num2str(ClrObjHeight) 'm high'])
+xlabel(handles.axes3,'Min Distance to perceive (m)')
+ylabel(handles.axes3,'MountAngle (Deg)')
+for t = 1:size(ZPosTVar,1)
+labels{t} = ['ZPos ' num2str(ZPosTVar(t)) ' m'];
+end
+legend(handles.axes3,labels)
+
+
+% --- Executes on button press in pushbutton4.
+function pushbutton4_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+SenVert = get(handles.slider2,'Value');
+MountAngle = get(handles.slider3,'Value');
+GroundPresep = get(handles.slider1,'Value');
+Gamma = get(handles.slider5,'Value');
+ObjHeightPersep = get(handles.slider6,'Value');
+ObjDistancePersep = get(handles.slider7,'Value');
+ClrObjHeight = get(handles.slider8,'Value');
+BHeight = 1.05 ;
+BLength = 1.118 ;
+WAngle = 40 ;
+
+ZPos = linspace(0.1,2.4,461); %increment 5mm
+ZPosT = transpose(ZPos);
+
+Height = linspace(0.1,6,591);
+HeightT = transpose(Height);
+
+DistanceHi = linspace(0,300,6001); %increment 50mm
+DistanceHiT = transpose(DistanceHi);
+
+if abs(MountAngle) >= abs((SenVert)/2)
+    h = msgbox('Warning: MountAngle >= SenVert , some or all outputs maybe incorrect');
+end
+
+MountAngleVar = linspace(-14,14,100);
+BetaVar = ((SenVert/2) - MountAngleVar)*(pi/180);
+
+[MaxOutZPosObj] = GetMaxZPositionObject(BetaVar,Gamma,ZPosT,HeightT,GroundPresep,ObjHeightPersep,ObjDistancePersep,BLength,BHeight,WAngle);
+
+filename = 'MountAngle_v_MaxZPos to percieve Obj data.xlsx';
+A = [MountAngleVar' MaxOutZPosObj];
+xlswrite(filename,A)
+
+plot(handles.axes3,MaxOutZPosObj,MountAngleVar,'LineWidth',2');
+grid (handles.axes3,'on')
+grid (handles.axes3,'minor')
+title(handles.axes3,'MountAngle vs Max ZPos to percieve Obj')
+xlabel(handles.axes3,'Max sensor height (Z-position (m))')
+ylabel(handles.axes3,'MountAngle (Deg)')

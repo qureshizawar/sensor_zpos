@@ -25,6 +25,7 @@ ClrObjHeight = 1.7;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 ZPos = linspace(0.1,2.4,461); %increment 5mm
+% ZPos = linspace(0.1,2.4,922); %increment 5mm
 ZPosT = transpose(ZPos);
 
 Height = linspace(0.1,3,291);
@@ -113,39 +114,42 @@ MaxobjPositive = zeros(size(Ground,1),size(HeightT,1));
 
 for s = 1:size(BetaVar,2)
 
-for n = 1:size(HeightT,1) 
-%     objAbs(:,n) = Ground - HeightT(n,1)/tan(BetaVar(s));
-    MaxobjPositive(:,n) = Ground - HeightT(n,1)/tan(BetaVar(s)+Gamma);
+    [Ground,GroundCrit,ZPosGround] = GetMaxZPosition(BetaVar(s),GroundPresep,ZPosT,BHeight,BLength,WAngle);
     
-%     objAbs(objAbs < 0) = NaN;
-    MaxobjPositive(MaxobjPositive < 0) = NaN;
-end
+    for n = 1:size(HeightT,1) 
+    %     objAbs(:,n) = Ground - HeightT(n,1)/tan(BetaVar(s));
+        MaxobjPositive(:,n) = Ground - HeightT(n,1)/tan(BetaVar(s)+Gamma);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-MaxkGnd = find(HeightT>=ObjHeightPersep, 1, 'first');
-Maxobjpersep = MaxobjPositive(:,MaxkGnd);
-MaxObjCrit = NaN([size(objpersep,1),1]);
-MaxZPosObj = NaN([size(ZPosT,1),1]);
-cObj = 1;
-
-for a = 1:size(objpersep,1)
-    if Maxobjpersep(a,1) < ObjDistancePersep
-        MaxObjCrit(cObj,1) = Maxobjpersep(a,1);
-        MaxZPosObj(cObj,1) = ZPosT(a,1);
-        if MaxZPosObj(cObj,1) > BHeight
-            Wx = (ZPosObj(cObj,1) - BHeight)/tan(WAngle);
-            if MaxZPosObj(cObj,1) < BHeight + (BLength + Wx)*tan(Beta)
-                MaxObjCrit(cObj,1) = NaN;
-                MaxZPosObj(cObj,1) = NaN;
-            end
-        end
-        cObj = cObj+1;
+    %     objAbs(objAbs < 0) = NaN;
+        MaxobjPositive(MaxobjPositive < 0) = NaN;
     end
-    
-end
 
-MaxOutObjCrit(s,1) = max(MaxObjCrit);
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    MaxkGnd = find(HeightT>=ObjHeightPersep, 1, 'first');
+    Maxobjpersep = MaxobjPositive(:,MaxkGnd);
+    MaxObjCrit = NaN([size(Maxobjpersep,1),1]);
+    MaxZPosObj = NaN([size(ZPosT,1),1]);
+    cObj = 1;
+
+    for a = 1:size(Maxobjpersep,1)
+        if Maxobjpersep(a,1) < ObjDistancePersep
+            MaxObjCrit(cObj,1) = Maxobjpersep(a,1);
+            MaxZPosObj(cObj,1) = ZPosT(a,1);
+            if MaxZPosObj(cObj,1) > BHeight
+                MaxWx = (MaxZPosObj(cObj,1) - BHeight)/tan(WAngle);
+                if MaxZPosObj(cObj,1) < BHeight + (BLength + MaxWx)*tan(BetaVar(s))
+                    MaxObjCrit(cObj,1) = NaN;
+                    MaxZPosObj(cObj,1) = NaN;
+                end
+            end
+            cObj = cObj+1;
+        end
+
+    end
+
+    MaxOutObjCrit(s,1) = max(MaxObjCrit);
+    MaxOutZPosObj(s,1) = max(MaxZPosObj);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -213,7 +217,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 figure
-plot()
+plot(MaxOutZPosObj,MountAngleVar);
 
 figure
 ax1 = subplot(1,2,1); % bottom subplot
