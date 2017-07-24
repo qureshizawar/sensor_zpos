@@ -121,8 +121,8 @@ Gamma = get(handles.slider5,'Value');
 ObjHeightPersep = get(handles.slider6,'Value');
 ObjDistancePersep = get(handles.slider7,'Value');
 ClrObjHeight = get(handles.slider8,'Value');
-BHeight = 1.05 ;
-BLength = 1.118 ;
+BHeight = 1.05 ; %L460
+BLength = 1.118 ; %L460
 WAngle = 40 ;
 
 ZPos = linspace(0.1,2.4,461); %increment 5mm
@@ -532,7 +532,8 @@ BHeight = 1.05 ;
 BLength = 1.118 ;
 WAngle = 40 ;
 
-ZPos = linspace(0.1,2.4,461); %increment 5mm
+% ZPos = linspace(0.1,2.4,461); %increment 5mm
+ZPos = linspace(0.1,2.4,1151); %increment 5mm
 ZPosT = transpose(ZPos);
 
 Height = linspace(0.1,6,591);
@@ -545,7 +546,8 @@ if abs(MountAngle) >= abs((SenVert)/2)
     h = msgbox('Warning: MountAngle >= SenVert , some or all outputs maybe incorrect');
 end
 
-MountAngleVar = linspace(-14,14,100);
+% MountAngleVar = linspace(-14,14,281);
+MountAngleVar = linspace(-14,14,561);
 BetaVar = ((SenVert/2) - MountAngleVar)*(pi/180);
 
 [MaxOutZPosObj] = GetMaxZPositionObject(BetaVar,Gamma,ZPosT,HeightT,GroundPresep,ObjHeightPersep,ObjDistancePersep,BLength,BHeight,WAngle);
@@ -554,9 +556,9 @@ filename = 'MountAngle_v_MaxZPos to percieve Obj data.xlsx';
 A = [MountAngleVar' MaxOutZPosObj];
 xlswrite(filename,A)
 
-plot(handles.axes3,MaxOutZPosObj,MountAngleVar,'LineWidth',2');
+plot(handles.axes3,MountAngleVar,MaxOutZPosObj,'LineWidth',2');
 grid (handles.axes3,'on')
 grid (handles.axes3,'minor')
 title(handles.axes3,'MountAngle vs Max ZPos to percieve Obj')
-xlabel(handles.axes3,'Max sensor height (Z-position (m))')
-ylabel(handles.axes3,'MountAngle (Deg)')
+xlabel(handles.axes3,'MountAngle (Deg)')
+ylabel(handles.axes3,'Max sensor height (Z-position (m))')

@@ -17,6 +17,7 @@ ZPos = linspace(0.1,2.4,231); %increment 10mm
 ZPosT = transpose(ZPos);
 
 % ObjDistance = linspace(0.1,2,461);
+ObjHeightPersep = 0.3;
 
 % ZPos = 0.5;
 % ix = zeros(399,461);
@@ -25,7 +26,7 @@ for s = 1:size(ZPos,2)
     y1(:,s) = -tan(Beta)*DistanceHiT + ZPos(s);
     y2(:,s) = tan(Alpha)*DistanceHiT + ZPos(s);
     g(:,s) = 0*DistanceHiT;
-    obj = linspace(0,0.1,10);
+    obj = linspace(0,ObjHeightPersep,50);
 
     xv = [0 max(DistanceHiT) max(DistanceHiT) 0]';
     yv = [ZPos(s) min(y1(:,s)) max(y2(:,s)) ZPos(s)]';

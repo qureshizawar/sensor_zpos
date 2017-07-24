@@ -1,9 +1,17 @@
 clear
 
+slopeAngle = 7;
+slope = tan(slopeAngle*(pi/180));
+% slope = 0.13;
+XMax = 2;
+
+b = slope;
+a = -b/(2*XMax);
+
 SenVert = 30;
 MountAngle = 0; %+ve clockwise
 % Orientation = 0;
-Orientation = atan(-(1/0.1))*(180/pi) +90;
+Orientation = atan(-(1/b))*(180/pi) +90;
 Gamma = 0.1;
 
 Alpha = ((SenVert/2) + MountAngle + Orientation)*(pi/180);
@@ -19,20 +27,39 @@ DistanceHiT = transpose(DistanceHi);
 % ZPosT = transpose(ZPos);
 ZPos = 0.5;
 
+ObjHeightPersep = 0.3;
+ObjDistancePersep = 4.75;
+
 l = tan((Alpha-Beta)/2)*DistanceHiT + ZPos;
 y1 = -tan(Beta)*DistanceHiT + ZPos;
 y2 = tan(Alpha)*DistanceHiT + ZPos;
 % g = 0*DistanceHiT ;
-g = -(1/40)*DistanceHiT.^2 + 0.1*DistanceHiT;
+% g = -(1/40)*DistanceHiT.^2 + 0.1*DistanceHiT;
+g = a*(DistanceHiT.^2) + b*DistanceHiT;
 % dg = gradient(g)
-dg = -2*(1/40)*DistanceHiT +0.1;
-ndg = -(1/dg(1));
-% dg = diff(g)/0.001;
-% obj = (diff(g))
-c = -(1/40)*1.^2 + 0.1*1 - ndg*1;
-xo = linspace(1-0.4*sin(atan(ndg)+(pi/2)),1,100);
-yObj = ndg*xo + c;
+dg = 2*a*DistanceHiT +b;
 
+grad = 2*a*ObjDistancePersep +b
+
+if grad == 0
+    yObj = linspace(a*ObjDistancePersep.^2 + b*ObjDistancePersep,ObjHeightPersep,100);
+    xo(1:100) = ObjDistancePersep;
+elseif grad > 0
+    ndg = -(1/grad);
+    % dg = diff(g)/0.001;
+    % obj = (diff(g))
+    c = a*ObjDistancePersep.^2 + b*ObjDistancePersep - ndg*ObjDistancePersep;
+    xo = linspace(ObjDistancePersep-ObjHeightPersep*sin(atan(ndg)+(pi/2)),ObjDistancePersep,100);
+    yObj = ndg*xo + c;
+    
+elseif grad < 0
+    ndg = -(1/grad);
+    % dg = diff(g)/0.001;
+    % obj = (diff(g))
+    c = a*ObjDistancePersep.^2 + b*ObjDistancePersep - ndg*ObjDistancePersep;
+    xo = linspace(ObjDistancePersep,ObjDistancePersep-ObjHeightPersep*sin(atan(ndg)-(pi/2)),100);
+    yObj = ndg*xo + c;
+end
 
 xv = [0 max(DistanceHiT) max(DistanceHiT) 0]';
 yv = [ZPos min(y1) max(y2) ZPos]';
