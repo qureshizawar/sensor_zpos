@@ -21,7 +21,7 @@ l = tan((Alpha-Beta)/2)*DistanceHiT + ZPos;
 y1 = -tan(Beta)*DistanceHiT + ZPos;
 y2 = tan(Alpha)*DistanceHiT + ZPos;
 g = 0*DistanceHiT ;
-obj = linspace(0,0.1,101);
+obj = linspace(0,0.5,101);
 
 xv = [0 max(DistanceHiT) max(DistanceHiT) 0]';
 yv = [ZPos min(y1) max(y2) ZPos]';

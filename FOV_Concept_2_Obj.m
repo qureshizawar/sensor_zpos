@@ -25,7 +25,7 @@ tic
 for s = 1:size(ZPos,2)
     y1(:,s) = -tan(Beta)*DistanceHiT + ZPos(s);
     y2(:,s) = tan(Alpha)*DistanceHiT + ZPos(s);
-    g(:,s) = 0*DistanceHiT;
+    g(:,s) = 0*DistanceHiT; 
     obj = linspace(0,ObjHeightPersep,50);
 
     xv = [0 max(DistanceHiT) max(DistanceHiT) 0]';
